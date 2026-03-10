@@ -29,11 +29,11 @@ jobs:
           script: |
             set -e
             # 首次部署：目录或脚本不存在时先克隆仓库
-            if [ ! -f "/opt/alog/deploy/update.sh" ]; then
-              mkdir -p /opt/alog
-              git clone git@github.com:2634213728/Alog.git /opt/alog
+            if [ ! -f "/home/alog/alog/deploy/update.sh" ]; then
+              mkdir -p /home/alog/alog
+              git clone git@github.com:2634213728/Alog.git /home/alog/alog
             fi
-            bash /opt/alog/deploy/update.sh
+            bash /home/alog/alog/deploy/update.sh
 
       - name: Notify on failure
         if: failure()

@@ -8,9 +8,9 @@ set -e
 
 echo "🚀 开始部署 Alog..."
 
-DEPLOY_DIR="/opt/alog"
-DATA_DIR="/opt/alog/data"
-LOG_DIR="/var/log/alog"
+DEPLOY_DIR="/home/alog/alog"
+DATA_DIR="/home/alog/alog/data"
+LOG_DIR="/home/alog/alog/logs"
 ADMIN_TOKEN="${ADMIN_TOKEN:-$(openssl rand -hex 24)}"
 
 # 1. 安装 Node.js（若未安装）
@@ -64,7 +64,7 @@ EOF
 echo "⚙️  配置 PM2..."
 cp ../deploy/ecosystem.config.cjs "$DEPLOY_DIR/"
 # 替换路径
-sed -i "s|/opt/alog/website|$DEPLOY_DIR/website|g" "$DEPLOY_DIR/ecosystem.config.cjs"
+sed -i "s|/home/alog/alog/website|$DEPLOY_DIR/website|g" "$DEPLOY_DIR/ecosystem.config.cjs"
 sed -i "s|change-this-in-production|$ADMIN_TOKEN|g" "$DEPLOY_DIR/ecosystem.config.cjs"
 
 cd "$DEPLOY_DIR"

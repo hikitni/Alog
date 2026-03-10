@@ -6,9 +6,9 @@
 # ============================================================
 set -e
 
-DEPLOY_DIR="/opt/alog"
+DEPLOY_DIR="/home/alog/alog"
 WEBSITE_DIR="$DEPLOY_DIR/website"
-LOG_DIR="/var/log/alog"
+LOG_DIR="$DEPLOY_DIR/logs"
 REPO_URL="git@github.com:2634213728/Alog.git"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
