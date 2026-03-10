@@ -2,9 +2,21 @@
 # ============================================================
 # Alog 服务器端热更新脚本（由 GitHub Actions 远程调用）
 # 适用于: Ubuntu 22.04 / PM2 管理的 Next.js 项目
-# 前置条件: 首次部署已通过 deploy.sh 完成
 # ============================================================
 set -e
+
+# ---------- 加载 nvm / Node 环境（非交互式 SSH 不自动加载） ----------
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+# 如果 nvm 不存在，尝试系统级 node 路径
+export PATH="$HOME/.local/bin:/usr/local/bin:/usr/bin:$PATH"
+
+# ---------- 安装 PM2（若未安装） ----------
+if ! command -v pm2 &>/dev/null; then
+  echo "📦 PM2 未安装，正在安装..."
+  npm install -g pm2
+fi
 
 DEPLOY_DIR="/home/alog/alog"
 WEBSITE_DIR="$DEPLOY_DIR/website"
