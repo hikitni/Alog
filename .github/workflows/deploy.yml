@@ -31,6 +31,10 @@ jobs:
             DEPLOY_DIR="/home/alog/alog"
             REPO_URL="git@github.com:2634213728/Alog.git"
 
+            # 确保 GitHub 主机指纹已信任（解决 Host key verification failed）
+            mkdir -p ~/.ssh
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null
+
             if [ ! -d "$DEPLOY_DIR/.git" ]; then
               # 目录存在但不是 git 仓库（上次克隆中断），清理后重新克隆
               rm -rf "$DEPLOY_DIR"
