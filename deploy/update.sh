@@ -5,12 +5,17 @@
 # ============================================================
 set -e
 
-# ---------- 加载 nvm / Node 环境（非交互式 SSH 不自动加载） ----------
+# ---------- 加载环境（非交互式 SSH 不自动加载 PATH） ----------
+# 支持 nvm 和 apt 两种 Node 安装方式
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-# nvm 激活后，全局 bin 已在 PATH 中（~/.nvm/versions/node/vXX/bin）
-# 如果之前错误设置了 prefix，恢复为 nvm 默认
-npm config delete prefix 2>/dev/null || true
+# npm config delete prefix 2>/dev/null || true  ← 仅 nvm 用户需要
+# apt 安装的 Node：全局 npm 前缀设为用户目录（避免 sudo）
+if npm config get prefix 2>/dev/null | grep -q "^/usr"; then
+  mkdir -p "$HOME/.npm-global"
+  npm config set prefix "$HOME/.npm-global"
+fi
+export PATH="$HOME/.npm-global/bin:$PATH"
 
 # ---------- 安装 PM2（若未安装） ----------
 if ! command -v pm2 &>/dev/null; then
