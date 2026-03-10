@@ -57,21 +57,27 @@ cd "$WEBSITE_DIR"
 npm ci --production=false
 echo "✅ 依赖安装完成"
 
-# ---------- 3. 构建项目 ----------
+# ---------- 3. 生成 Prisma Client ----------
 echo ""
-echo "▶ [3/5] 构建 Next.js 项目..."
+echo "▶ [3/6] 生成 Prisma Client..."
+npx prisma generate
+echo "✅ Prisma Client 生成完成"
+
+# ---------- 4. 构建项目 ----------
+echo ""
+echo "▶ [4/6] 构建 Next.js 项目..."
 npm run build
 echo "✅ 构建完成"
 
-# ---------- 4. 数据库迁移 ----------
+# ---------- 5. 数据库迁移 ----------
 echo ""
-echo "▶ [4/5] 执行数据库迁移..."
+echo "▶ [5/6] 执行数据库迁移..."
 npx prisma migrate deploy
 echo "✅ 数据库迁移完成"
 
-# ---------- 5. 重载 PM2（零停机） ----------
+# ---------- 6. 重载 PM2（零停机） ----------
 echo ""
-echo "▶ [5/5] 重载 PM2 进程..."
+echo "▶ [6/6] 重载 PM2 进程..."
 # reload 会进行滚动重启，实现零停机
 # 若进程不存在则使用 start
 if pm2 describe alog > /dev/null 2>&1; then
