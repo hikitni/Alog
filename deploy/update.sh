@@ -9,7 +9,7 @@ set -e
 DEPLOY_DIR="/home/alog/alog"
 WEBSITE_DIR="$DEPLOY_DIR/website"
 LOG_DIR="$DEPLOY_DIR/logs"
-REPO_URL="git@github.com:2634213728/Alog.git"
+REPO_URL="https://${GH_TOKEN}@github.com/2634213728/Alog.git"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
 echo "=========================================="
@@ -25,6 +25,8 @@ if [ ! -d "$DEPLOY_DIR/.git" ]; then
   git clone "$REPO_URL" "$DEPLOY_DIR"
 else
   cd "$DEPLOY_DIR"
+  # 每次更新 remote URL（确保 Token 最新）
+  git remote set-url origin "$REPO_URL"
   git pull origin main
 fi
 echo "✅ 代码更新完成"

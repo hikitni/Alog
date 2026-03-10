@@ -26,12 +26,13 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           # 脚本执行超时 10 分钟
           command_timeout: 10m
+          envs: GH_TOKEN
           script: |
             set -e
             DEPLOY_DIR="/home/alog/alog"
-            REPO_URL="git@github.com:2634213728/Alog.git"
+            REPO_URL="https://$GH_TOKEN@github.com/2634213728/Alog.git"
 
-            # 确保 GitHub 主机指纹已信任（解决 Host key verification failed）
+            # 确保 GitHub 主机指纹已信任
             mkdir -p ~/.ssh
             ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null
 
@@ -42,6 +43,8 @@ jobs:
               git clone "$REPO_URL" "$DEPLOY_DIR"
             fi
             bash "$DEPLOY_DIR/deploy/update.sh"
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Notify on failure
         if: failure()
