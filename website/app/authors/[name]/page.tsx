@@ -35,11 +35,11 @@ export default async function AuthorDetailPage({ params, searchParams }: Props) 
   const primarySource = allLogs[0].source
   const sourceColor = getSourceColor(primarySource)
 
-  const dailyCount = allLogs.filter((l) => l.type === 'daily').length
-  const blogCount = allLogs.filter((l) => l.type === 'blog').length
+  const dailyCount = allLogs.filter((l: typeof allLogs[number]) => l.type === 'daily').length
+  const blogCount = allLogs.filter((l: typeof allLogs[number]) => l.type === 'blog').length
 
   // Apply type filter
-  const logs = typeFilter ? allLogs.filter((l) => l.type === typeFilter) : allLogs
+  const logs = typeFilter ? allLogs.filter((l: typeof allLogs[number]) => l.type === typeFilter) : allLogs
 
   const tabClass = (t?: string) =>
     `px-3 py-1.5 rounded-md text-sm font-mono transition-all duration-200 ${

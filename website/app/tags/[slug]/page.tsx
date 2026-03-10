@@ -24,7 +24,7 @@ export default async function TagPage({ params }: Props) {
 
   if (!tag) notFound()
 
-  const logs = tag.logs.map((lt) => lt.log)
+  const logs = tag.logs.map((lt: typeof tag.logs[number]) => lt.log)
 
   return (
     <div className="space-y-8">

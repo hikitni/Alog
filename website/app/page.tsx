@@ -19,8 +19,8 @@ export default async function HomePage() {
     }),
   ])
 
-  const dailyCount = logs.filter((l) => l.type === 'daily').length
-  const blogCount = logs.filter((l) => l.type === 'blog').length
+  const dailyCount = logs.filter((l: typeof logs[number]) => l.type === 'daily').length
+  const blogCount = logs.filter((l: typeof logs[number]) => l.type === 'blog').length
 
   return (
     <div className="space-y-8">
