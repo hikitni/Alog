@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from 'react'
 
+const RULES_VERSION = 'v2.0'
+
 interface ApiKey {
   id: string
   name: string
@@ -206,6 +208,7 @@ function generateRulesContent(apiKey: string, server: string, source: string) {
   const src = source || 'unknown'
 
   return `# Alog 工作日志规则
+<!-- rules-version: ${RULES_VERSION} -->
 
 ## 触发关键字
 
@@ -239,16 +242,9 @@ curl -s -X POST ${srv}/api/logs \\
 
 **Windows PowerShell：**
 \`\`\`powershell
-$body = [System.Text.Encoding]::UTF8.GetBytes((@{
-  type    = "daily"
-  title   = "日报 — $(Get-Date -Format 'yyyy-MM-dd')"
-  content = "## 今日完成任务\`n- （替换为实际内容）\`n\`n## 技术要点\`n- （关键决策）\`n\`n## 遇到的问题\`n- 无\`n\`n## 明日计划\`n- （下一步）"
-  source  = "${src}"
-  tags    = "标签1,标签2"
-} | ConvertTo-Json -Depth 3))
-Invoke-RestMethod -Method Post -Uri "${srv}/api/logs" \`
-  -Headers @{ Authorization = "Bearer ${key}" } \`
-  -ContentType "application/json; charset=utf-8" -Body $body
+$c = "## 今日完成任务\`n- （替换为实际内容）\`n\`n## 技术要点\`n- （关键决策）\`n\`n## 遇到的问题\`n- 无\`n\`n## 明日计划\`n- （下一步）"
+$b = [System.Text.Encoding]::UTF8.GetBytes((@{ type="daily"; title="日报 — $(Get-Date -Format 'yyyy-MM-dd')"; content=$c; source="${src}"; tags="标签1,标签2" } | ConvertTo-Json -Depth 3))
+Invoke-RestMethod -Method Post -Uri "${srv}/api/logs" -Headers @{Authorization="Bearer ${key}"} -ContentType "application/json; charset=utf-8" -Body $b
 \`\`\`
 
 标签规则：从对话提取技术栈名 + 功能模块名，2-5 个，用英文逗号分隔。
@@ -270,16 +266,9 @@ curl -s -X POST ${srv}/api/logs \\
 
 **Windows PowerShell：**
 \`\`\`powershell
-$body = [System.Text.Encoding]::UTF8.GetBytes((@{
-  type    = "blog"
-  title   = "博客标题"
-  content = "## 背景与目标\`n（问题描述）\`n\`n## 实现方案\`n（技术思路）\`n\`n## 关键实现\`n（代码示例）\`n\`n## 总结\`n（价值）"
-  source  = "${src}"
-  tags    = "标签1,标签2"
-} | ConvertTo-Json -Depth 3))
-Invoke-RestMethod -Method Post -Uri "${srv}/api/logs" \`
-  -Headers @{ Authorization = "Bearer ${key}" } \`
-  -ContentType "application/json; charset=utf-8" -Body $body
+$c = "## 背景与目标\`n（问题描述）\`n\`n## 实现方案\`n（技术思路）\`n\`n## 关键实现\`n（代码示例）\`n\`n## 总结\`n（价值）"
+$b = [System.Text.Encoding]::UTF8.GetBytes((@{ type="blog"; title="博客标题"; content=$c; source="${src}"; tags="标签1,标签2" } | ConvertTo-Json -Depth 3))
+Invoke-RestMethod -Method Post -Uri "${srv}/api/logs" -Headers @{Authorization="Bearer ${key}"} -ContentType "application/json; charset=utf-8" -Body $b
 \`\`\`
 
 ---
@@ -395,6 +384,7 @@ export default function SetupPage() {
         <div className="flex items-center gap-3 mb-2">
           <span className="text-2xl">🔌</span>
           <h1 className="text-2xl font-bold text-[#e2e8f0] font-mono tracking-wide">接入指南</h1>
+          <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-[#00d4ff12] border border-[#00d4ff30] text-[#00d4ff] select-none">rules-version: {RULES_VERSION}</span>
         </div>
         <p className="text-slate-400 text-sm leading-relaxed max-w-2xl">
           只需 <strong className="text-[#00d4ff]">API Key</strong> + <strong className="text-[#00d4ff]">Server 地址</strong>，
