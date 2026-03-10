@@ -30,8 +30,7 @@ jobs:
             set -e
             # 首次部署：目录或脚本不存在时先克隆仓库
             if [ ! -f "/opt/alog/deploy/update.sh" ]; then
-              sudo mkdir -p /opt/alog
-              sudo chown -R "$USER":"$USER" /opt/alog
+              mkdir -p /opt/alog
               git clone git@github.com:2634213728/Alog.git /opt/alog
             fi
             bash /opt/alog/deploy/update.sh

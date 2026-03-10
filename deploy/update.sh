@@ -21,8 +21,7 @@ echo ""
 echo "▶ [1/5] 拉取最新代码..."
 if [ ! -d "$DEPLOY_DIR/.git" ]; then
   echo "⚠️  目录不存在或非 git 仓库，执行首次克隆..."
-  sudo mkdir -p "$DEPLOY_DIR"
-  sudo chown -R "$USER":"$USER" "$DEPLOY_DIR"
+  mkdir -p "$DEPLOY_DIR"
   git clone "$REPO_URL" "$DEPLOY_DIR"
 else
   cd "$DEPLOY_DIR"
