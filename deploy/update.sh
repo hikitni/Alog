@@ -93,14 +93,18 @@ echo "✅ 数据库迁移完成"
 # ---------- 6. 重载 PM2（零停机） ----------
 echo ""
 echo "▶ [6/6] 重载 PM2 进程..."
-# reload 会进行滚动重启，实现零停机
-# 若进程不存在则使用 start
+
+# 确保日志目录存在
+mkdir -p "$DEPLOY_DIR/logs"
+
+# 从 .env.production 读取 ADMIN_TOKEN
+ADMIN_TOKEN=$(grep '^ADMIN_TOKEN=' "$WEBSITE_DIR/.env.production" 2>/dev/null | cut -d'=' -f2- | tr -d '"' || echo '')
+
 if pm2 describe alog > /dev/null 2>&1; then
-  pm2 reload alog --update-env
+  ADMIN_TOKEN="$ADMIN_TOKEN" pm2 reload alog --update-env
 else
   echo "⚠️  PM2 进程 alog 不存在，尝试启动..."
-  cd "$DEPLOY_DIR"
-  pm2 start ecosystem.config.cjs
+  ADMIN_TOKEN="$ADMIN_TOKEN" pm2 start "$DEPLOY_DIR/deploy/ecosystem.config.cjs"
   pm2 save
 fi
 echo "✅ PM2 重载完成"

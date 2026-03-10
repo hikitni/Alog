@@ -10,7 +10,7 @@ module.exports = {
       cwd: '/home/alog/alog/website',
       env: {
         NODE_ENV: 'production',
-        ADMIN_TOKEN: 'change-this-in-production',
+        ADMIN_TOKEN: process.env.ADMIN_TOKEN || 'change-this-in-production',
       },
       max_memory_restart: '300M',
       restart_delay: 3000,
