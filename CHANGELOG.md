@@ -6,6 +6,15 @@
 
 ---
 
+## [1.7.0] - 2026-03-11
+
+### 新增
+- 全文检索功能：`GET /api/logs` 新增 `q`（关键字）、`author`、`from`、`to`、`page`、`pageSize` 参数，支持 title + content + tag.name 的 `LIKE` 模糊匹配，同时返回分页元数据（`total`、`totalPages`）；保留 `limit` 参数向后兼容
+- `/search` 页面：独立检索页，含实时搜索（300ms debounce）、过滤面板（类型/作者/日期范围）、分页按钮组、骨架屏 loading 状态、空态提示
+- Header 搜索入口：右上角新增 🔍 图标，点击后展开内联搜索框，Enter 跳转 `/search?q=...`，Escape 关闭
+
+---
+
 ## [1.6.0] - 2026-03-11
 
 ### 新增

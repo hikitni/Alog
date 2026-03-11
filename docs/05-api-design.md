@@ -5,10 +5,13 @@
 | 方法 | 路径 | 认证 | 说明 |
 |------|------|------|------|
 | `POST` | `/api/logs` | API Key | 推送新日志 |
-| `GET` | `/api/logs` | 无 | 查询日志列表 |
+| `GET` | `/api/logs` | 无 | 查询日志列表（支持全文检索 + 分页） |
 | `GET` | `/api/tags` | 无 | 获取标签列表（含数量） |
 | `GET` | `/api/authors` | 无 | 获取作者列表（含日志数） |
 | `POST` | `/api/logs/[id]/view` | 无 | 记录该条日志的一次访问 |
+| `PATCH` | `/api/logs/[id]` | Token | 编辑日志 |
+| `DELETE` | `/api/logs/[id]` | Token | 删除日志 |
+| `POST` | `/api/auth/verify` | 无 | 验证 Token 合法性 |
 | `POST` | `/api/keys` | Admin Token | 创建 API Key |
 | `GET` | `/api/keys` | Admin Token | 列出所有 API Key（需鉴权） |
 | `DELETE` | `/api/keys` | Admin Token | 删除 API Key（支持 `?id=` 参数） |
@@ -75,14 +78,48 @@ Content-Type: application/json; charset=utf-8
 
 ### 查询参数
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `type` | `daily` \| `blog` | 按类型筛选 |
-| `tag` | `string` | 按标签 slug 筛选 |
-| `limit` | `number` | 返回数量限制（默认 50） |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `q` | `string` | — | 关键字全文检索（title + content + tag.name，`LIKE` 匹配） |
+| `type` | `daily` \| `blog` | — | 按日志类型筛选 |
+| `author` | `string` | — | 按作者精确筛选 |
+| `tag` | `string` | — | 按标签 slug 精确筛选 |
+| `from` | `YYYY-MM-DD` | — | 创建时间下界（闭区间） |
+| `to` | `YYYY-MM-DD` | — | 创建时间上界（含当天 23:59:59） |
+| `page` | `number` | `1` | 页码（从 1 起） |
+| `pageSize` | `number` | `20` | 每页数量（最大 100） |
+| `limit` | `number` | — | 兼容旧调用，传入时直接 take N 条并省略分页字段 |
+
+### 响应
+
+**分页响应（不传 `limit` 时）：**
+```json
+{
+  "logs": [...],
+  "total": 87,
+  "page": 2,
+  "pageSize": 20,
+  "totalPages": 5
+}
+```
+
+**兼容旧响应（传 `limit` 时）：**
+```json
+{ "logs": [...] }
+```
 
 ### 示例
 ```bash
+# 关键字检索
+GET /api/logs?q=React
+
+# 组合：博客 + 关键字 + 时间范围 + 第 2 页
+GET /api/logs?q=TypeScript&type=blog&from=2026-01-01&to=2026-03-11&page=2
+
+# 按作者检索
+GET /api/logs?author=张三
+
+# 兼容旧用法
 GET /api/logs?type=daily&limit=10
 GET /api/logs?tag=typescript
 ```

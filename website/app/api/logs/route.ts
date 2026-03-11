@@ -2,24 +2,70 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils'
 
-// GET /api/logs — list logs
+// GET /api/logs — list logs with search & pagination
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
-  const type = searchParams.get('type')
-  const tag = searchParams.get('tag')
-  const limit = parseInt(searchParams.get('limit') ?? '50')
+  const type   = searchParams.get('type')
+  const tag    = searchParams.get('tag')
+  const q      = searchParams.get('q')?.trim() || null
+  const author = searchParams.get('author')?.trim() || null
+  const from   = searchParams.get('from')
+  const to     = searchParams.get('to')
+  const page     = Math.max(1, parseInt(searchParams.get('page')     ?? '1'))
+  const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') ?? '20')))
+  // Backward compat: `limit` param bypasses pagination
+  const limitParam = searchParams.get('limit')
 
-  const logs = await prisma.log.findMany({
-    where: {
-      ...(type ? { type } : {}),
-      ...(tag ? { tags: { some: { tag: { slug: tag } } } } : {}),
-    },
-    include: { tags: { include: { tag: true } } },
-    orderBy: { createdAt: 'desc' },
-    take: limit,
+  const where = {
+    AND: [
+      type   ? { type }   : {},
+      author ? { author } : {},
+      tag    ? { tags: { some: { tag: { slug: tag } } } } : {},
+      from || to ? {
+        createdAt: {
+          ...(from ? { gte: new Date(from) } : {}),
+          ...(to   ? { lte: new Date(to + 'T23:59:59.999Z') } : {}),
+        },
+      } : {},
+      q ? {
+        OR: [
+          { title:   { contains: q } },
+          { content: { contains: q } },
+          { tags: { some: { tag: { name: { contains: q } } } } },
+        ],
+      } : {},
+    ],
+  }
+
+  // Legacy: limit param returns flat list without pagination metadata
+  if (limitParam) {
+    const logs = await prisma.log.findMany({
+      where,
+      include: { tags: { include: { tag: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: parseInt(limitParam),
+    })
+    return NextResponse.json({ logs })
+  }
+
+  const [logs, total] = await Promise.all([
+    prisma.log.findMany({
+      where,
+      include: { tags: { include: { tag: true } } },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.log.count({ where }),
+  ])
+
+  return NextResponse.json({
+    logs,
+    total,
+    page,
+    pageSize,
+    totalPages: Math.ceil(total / pageSize),
   })
-
-  return NextResponse.json({ logs })
 }
 
 // POST /api/logs — create log
