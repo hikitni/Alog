@@ -16,12 +16,16 @@ export default function TagBadge({ name, slug, count, active, size = 'sm' }: Tag
   return (
     <Link
       href={`/tags/${slug}`}
-      className={`inline-flex items-center gap-1 rounded-full border font-mono transition-all duration-200
-        ${base}
-        ${active
-          ? 'border-[#00d4ff60] bg-[#00d4ff15] text-[#00d4ff]'
-          : 'border-[#1e2d40] bg-[#0f1629] text-slate-400 hover:border-[#00d4ff40] hover:text-[#00d4ff] hover:bg-[#00d4ff0a]'
-        }`}
+      className={`inline-flex items-center gap-1 rounded-full border font-mono transition-all duration-200 ${base}`}
+      style={active ? {
+        borderColor: 'rgba(var(--accent-rgb),0.38)',
+        background: 'rgba(var(--accent-rgb),0.10)',
+        color: 'var(--accent)',
+      } : {
+        borderColor: 'var(--border)',
+        background: 'var(--card-bg)',
+        color: 'var(--text-muted)',
+      }}
     >
       <span className="opacity-60">#</span>
       {name}
