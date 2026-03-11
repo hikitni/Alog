@@ -29,23 +29,24 @@ export default function ChangelogPage() {
       {/* 页头 */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-3">
-          <h1 className="text-2xl font-semibold font-mono" style={{ color: '#e2e8f0' }}>
+          <span className="text-2xl">⏳</span>
+          <h1 className="text-2xl font-bold font-mono tracking-wide" style={{ color: 'var(--text-primary)' }}>
             更新日志
           </h1>
           {latestVersion && (
             <span
-              className="text-xs font-mono px-2.5 py-1 rounded-full border"
+              className="text-xs font-mono px-2.5 py-1 rounded-full border mt-1"
               style={{
-                color: '#00d4ff',
-                borderColor: 'rgba(0,212,255,0.3)',
-                background: 'rgba(0,212,255,0.08)',
+                color: 'var(--accent)',
+                borderColor: 'rgba(var(--accent-rgb),0.3)',
+                background: 'rgba(var(--accent-rgb),0.08)',
               }}
             >
               最新 v{latestVersion}
             </span>
           )}
         </div>
-        <p className="text-sm" style={{ color: '#64748b' }}>
+        <p className="text-sm ml-10" style={{ color: 'var(--text-muted)' }}>
           记录每个版本的功能新增、修改与修复。
         </p>
         <div className="gradient-divider mt-6" />

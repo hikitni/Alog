@@ -402,14 +402,17 @@ export default function SetupPage() {
   return (
     <div className="space-y-10 pb-16">
       {/* Header */}
-      <div className="border-b border-[#1e2d40] pb-6">
+      <div className="pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3 mb-2">
           <span className="text-2xl">🔌</span>
-          <h1 className="text-2xl font-bold text-[#e2e8f0] font-mono tracking-wide">接入指南</h1>
-          <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-[#00d4ff12] border border-[#00d4ff30] text-[#00d4ff] select-none">rules-version: {RULES_VERSION}</span>
+          <h1 className="text-2xl font-bold font-mono tracking-wide" style={{ color: 'var(--text-primary)' }}>接入指南</h1>
+          <span className="text-xs font-mono px-2 py-0.5 rounded-full border select-none"
+            style={{ color: 'var(--accent)', borderColor: 'rgba(var(--accent-rgb),0.3)', background: 'rgba(var(--accent-rgb),0.1)' }}>
+            rules-version: {RULES_VERSION}
+          </span>
         </div>
-        <p className="text-slate-400 text-sm leading-relaxed max-w-2xl">
-          只需 <strong className="text-[#00d4ff]">API Key</strong> + <strong className="text-[#00d4ff]">Server 地址</strong>，
+        <p className="text-sm leading-relaxed max-w-2xl ml-10" style={{ color: 'var(--text-secondary)' }}>
+          只需 <strong style={{ color: 'var(--accent)' }}>API Key</strong> + <strong style={{ color: 'var(--accent)' }}>Server 地址</strong>，
           两步完成接入：配置凭证 → 复制规则文件到你的 AI 工具。无需安装任何 CLI 工具或 Shell 函数。
         </p>
       </div>

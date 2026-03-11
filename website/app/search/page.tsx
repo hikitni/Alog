@@ -124,8 +124,13 @@ function SearchPageInner() {
     <div className="space-y-6">
       {/* Page title */}
       <div>
-        <h1 className="text-2xl font-bold text-[#e2e8f0] font-mono tracking-wide">检索</h1>
-        <p className="text-slate-500 text-sm mt-1 font-mono">全文检索 · 支持标题、正文、标签</p>
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">🔍</span>
+          <h1 className="text-2xl font-bold font-mono tracking-wide" style={{ color: 'var(--text-primary)' }}>检索</h1>
+        </div>
+        <p className="text-sm mt-1 ml-10 font-mono" style={{ color: 'var(--text-muted)' }}>
+          全文检索 · 支持标题、正文、标签
+        </p>
       </div>
 
       {/* Search input */}

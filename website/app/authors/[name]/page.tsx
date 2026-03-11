@@ -41,19 +41,19 @@ export default async function AuthorDetailPage({ params, searchParams }: Props) 
   // Apply type filter
   const logs = typeFilter ? allLogs.filter((l: typeof allLogs[number]) => l.type === typeFilter) : allLogs
 
-  const tabClass = (t?: string) =>
-    `px-3 py-1.5 rounded-md text-sm font-mono transition-all duration-200 ${
-      typeFilter === t || (!typeFilter && !t)
-        ? 'text-[#00d4ff] bg-[#00d4ff12] border border-[#00d4ff30]'
-        : 'text-slate-400 hover:text-slate-200 hover:bg-[#ffffff08] border border-transparent'
-    }`
+  const tabClass = (t?: string) => {
+    const isActive = typeFilter === t || (!typeFilter && !t)
+    return isActive
+      ? { color: 'var(--accent)', background: 'rgba(var(--accent-rgb),0.12)', border: '1px solid rgba(var(--accent-rgb),0.3)' }
+      : { color: 'var(--text-muted)', border: '1px solid transparent' }
+  }
 
   return (
     <div className="space-y-8">
       {/* Back */}
       <Link
         href="/authors"
-        className="inline-flex items-center gap-2 text-sm font-mono text-slate-500 hover:text-[#00d4ff] transition-colors"
+        className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent)] text-sm font-mono transition-colors"
       >
         ← 返回作者列表
       </Link>
@@ -64,9 +64,9 @@ export default async function AuthorDetailPage({ params, searchParams }: Props) 
           <div className="flex items-center gap-3">
             <span className="text-3xl">👤</span>
             <div>
-              <h1 className="text-2xl font-bold font-mono text-[#e2e8f0]">{decodedName}</h1>
+              <h1 className="text-2xl font-bold font-mono tracking-wide" style={{ color: 'var(--text-primary)' }}>{decodedName}</h1>
               <div className="flex items-center gap-3 mt-1 flex-wrap">
-                <span className={`text-xs font-mono px-2 py-0.5 rounded-full border ${sourceColor}`}>
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full border" style={sourceColor as any}>
                   {primarySource}
                 </span>
               </div>
@@ -74,21 +74,21 @@ export default async function AuthorDetailPage({ params, searchParams }: Props) 
           </div>
         </div>
 
-        <div className="flex items-center gap-6 mt-4 text-sm font-mono">
-          <span>
-            <span className="text-[#00d4ff] font-bold">{allLogs.length}</span>
-            <span className="text-slate-500 ml-1">条日志</span>
+        <div className="flex items-center gap-6 mt-4 text-sm font-mono flex-wrap">
+          <span style={{ color: 'var(--text-muted)' }}>
+            <span className="font-bold" style={{ color: 'var(--accent)' }}>{allLogs.length}</span>
+            <span className="ml-1">条日志</span>
           </span>
-          <span>
-            <span className="text-emerald-400 font-bold">{dailyCount}</span>
-            <span className="text-slate-500 ml-1">日报</span>
+          <span style={{ color: 'var(--text-muted)' }}>
+            <span className="font-bold" style={{ color: 'var(--accent-green)' }}>{dailyCount}</span>
+            <span className="ml-1">日报</span>
           </span>
-          <span>
-            <span className="text-purple-400 font-bold">{blogCount}</span>
-            <span className="text-slate-500 ml-1">博客</span>
+          <span style={{ color: 'var(--text-muted)' }}>
+            <span className="font-bold" style={{ color: 'var(--accent2)' }}>{blogCount}</span>
+            <span className="ml-1">博客</span>
           </span>
           {allLogs[0] && (
-            <span className="text-slate-600 text-xs ml-auto">
+            <span className="text-xs ml-auto opacity-60" style={{ color: 'var(--text-muted)' }}>
               最近活跃：{allLogs[0].createdAt.toLocaleDateString('zh-CN')}
             </span>
           )}
@@ -97,9 +97,15 @@ export default async function AuthorDetailPage({ params, searchParams }: Props) 
 
       {/* Type filter tabs */}
       <div className="flex items-center gap-2">
-        <Link href={`/authors/${name}`} className={tabClass(undefined)}>全部</Link>
-        <Link href={`/authors/${name}?type=daily`} className={tabClass('daily')}>📅 日报</Link>
-        <Link href={`/authors/${name}?type=blog`} className={tabClass('blog')}>📝 博客</Link>
+        <Link href={`/authors/${name}`} className={`px-3 py-1.5 rounded-full text-sm font-mono transition-all duration-200 ${(!typeFilter) ? '' : 'hover:bg-black/5 dark:hover:bg-white/5'}`} style={tabClass(undefined)}>
+          全部分类
+        </Link>
+        <Link href={`/authors/${name}?type=daily`} className={`px-3 py-1.5 rounded-full text-sm font-mono transition-all duration-200 ${typeFilter === 'daily' ? '' : 'hover:bg-black/5 dark:hover:bg-white/5'}`} style={tabClass('daily')}>
+          📅 日报
+        </Link>
+        <Link href={`/authors/${name}?type=blog`} className={`px-3 py-1.5 rounded-full text-sm font-mono transition-all duration-200 ${typeFilter === 'blog' ? '' : 'hover:bg-black/5 dark:hover:bg-white/5'}`} style={tabClass('blog')}>
+          📝 博客
+        </Link>
       </div>
 
       <div className="gradient-divider" />
@@ -107,7 +113,7 @@ export default async function AuthorDetailPage({ params, searchParams }: Props) 
       {/* Log list */}
       {logs.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-slate-500 font-mono text-sm">该分类暂无记录</p>
+          <p className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>该分类暂无记录</p>
         </div>
       ) : (
         <div className="space-y-4">

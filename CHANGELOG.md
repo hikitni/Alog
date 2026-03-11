@@ -4,6 +4,15 @@
 
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
+## [1.8.1] - 2026-03-11
+
+### 修改
+- 优化前端展示，统一子页面标题与标签在浅色模式下的展示效果，增加科技风格。
+- 用内联 Tailwind CSS (hover) 替代硬编码在 `<Link>` 上的 `onMouseEnter/onMouseLeave` 以符合 Next.js App Router 服务端组件渲染规范。
+
+### 修复
+- 修复 `app/authors/page.tsx`, `app/authors/[name]/page.tsx`, `app/[type]/[id]/page.tsx`, `app/edit/[id]/EditForm.tsx` 的事件处理渲染导致 Performance 'measure' on 'Performance': 'LinkComponent' cannot have a negative time stamp 的前端异常问题。
+
 ---
 
 ## [1.8.0] - 2026-03-11

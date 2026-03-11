@@ -81,10 +81,7 @@ export default function EditForm({ log }: EditFormProps) {
       <div className="flex items-center justify-between mb-6">
         <Link
           href={`/${log.type}/${log.id}`}
-          className="text-sm font-mono transition-colors"
-          style={{ color: 'var(--text-muted)' }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+          className="text-[var(--text-muted)] hover:text-[var(--accent)] text-sm font-mono transition-colors"
         >
           ← 取消
         </Link>

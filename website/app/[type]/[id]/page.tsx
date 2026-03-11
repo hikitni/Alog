@@ -38,10 +38,7 @@ export default async function LogDetailPage({ params }: Props) {
       {/* Back */}
       <Link
         href={`/${type}`}
-        className="inline-flex items-center gap-2 text-sm font-mono transition-colors"
-        style={{ color: 'var(--text-muted)' }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent)')}
-        onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+        className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent)] text-sm font-mono transition-colors"
       >
         ← 返回{config.label}列表
       </Link>
@@ -63,10 +60,7 @@ export default async function LogDetailPage({ params }: Props) {
           {log.author && (
             <Link
               href={`/authors/${encodeURIComponent(log.author)}`}
-              className="text-xs font-mono transition-colors"
-              style={{ color: 'var(--text-muted)' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+              className="text-[var(--text-muted)] hover:text-[var(--accent)] text-xs font-mono transition-colors"
             >
               {log.author}
             </Link>
