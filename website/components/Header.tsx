@@ -9,6 +9,7 @@ const navItems = [
   { label: '博客', href: '/blog' },
   { label: '标签', href: '/tags' },
   { label: '作者', href: '/authors' },
+  { label: '更新日志', href: '/changelog' },
   { label: '接入', href: '/setup' },
 ]
 

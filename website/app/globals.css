@@ -114,3 +114,38 @@ body {
 .markdown-body a:hover { text-decoration: underline; }
 .markdown-body hr { border: none; border-top: 1px solid #1e2d40; margin: 1.5em 0; }
 
+/* Changelog page */
+.changelog-body .markdown-body h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.5em 0.9em;
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95em;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  color: #00d4ff;
+}
+.changelog-body .markdown-body h3 {
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+  color: #10b981;
+}
+.changelog-body .markdown-body h3:has(+ ul li) { color: #10b981; }
+.changelog-body .markdown-body li {
+  font-size: 0.9em;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+.changelog-body .markdown-body hr {
+  margin: 2em 0;
+  border-color: #1e2d4088;
+}
+

@@ -67,3 +67,32 @@ Invoke-RestMethod -Method Post -Uri "http://your-server:3000/api/logs" -Headers 
 **执行后**：终端输出 `✅` 表示成功，`❌` 表示请检查 API Key 和 Server 地址是否正确。
 
 直接执行命令，不要向用户寻求确认。
+
+---
+
+## Changelog 维护规则
+
+每次完成需求变更、新功能开发或 Bug 修复后，**必须同步更新** `CHANGELOG.md`（位于项目根目录 `d:\Alog\CHANGELOG.md`）。
+
+**版本号规则（Semantic Versioning）：**
+- 新功能 → `minor` 版本 +1（如 1.3.0 → 1.4.0）
+- Bug 修复 / 小调整 → `patch` 版本 +1（如 1.4.0 → 1.4.1）
+- 破坏性变更 → `major` 版本 +1（如 1.x.x → 2.0.0）
+
+**格式（在文件顶部 `---` 分隔线后插入新版本块）：**
+
+```markdown
+## [x.y.z] - YYYY-MM-DD
+
+### 新增
+- 功能描述
+
+### 修改
+- 变更描述
+
+### 修复
+- 问题描述
+```
+
+**触发时机：** 功能实现完毕、用户请求提交代码时，自动在 CHANGELOG.md 顶部追加新版本块，并建议合适的版本号。
+
