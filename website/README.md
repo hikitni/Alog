@@ -1,33 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alog — Website
 
-## Getting Started
+Alog 平台的 Next.js 前端 + API 服务。
 
-First, run the development server:
+## 开发
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 访问 http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 构建
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 环境变量
 
-## Learn More
+创建 `.env` 文件（已在 `.gitignore` 中）：
 
-To learn more about Next.js, take a look at the following resources:
+```env
+DATABASE_URL="file:../../data/alog.db"
+ADMIN_TOKEN="your-admin-token"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 项目说明
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+详见根目录 [README.md](../README.md) 和 [docs/](../docs/) 设计文档。
 
 ## Deploy on Vercel
 

@@ -21,7 +21,8 @@ export default function Header() {
       style={{ background: 'rgba(10, 14, 26, 0.85)' }}>
       <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
+        <a href="https://github.com/2634213728/Alog" target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-2 group">
           <span className="font-mono font-semibold text-lg tracking-widest text-glow-cyan"
             style={{ color: '#00d4ff' }}>
             ALOG
@@ -29,7 +30,7 @@ export default function Header() {
           <span className="text-xs text-slate-500 font-mono tracking-wider hidden sm:block">
             AI WORK LOG
           </span>
-        </Link>
+        </a>
 
         {/* Nav */}
         <nav className="flex items-center gap-1">

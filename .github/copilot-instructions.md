@@ -20,7 +20,9 @@
 
 ## 生成alog日报
 
-回顾本次对话完成的所有工作，构造 Markdown 内容，然后在终端执行（**根据操作系统选择对应命令**）：
+回顾本次对话完成的所有工作，构造 Markdown 内容，然后在终端执行：
+
+> ⚠ **根据当前操作系统选择命令，不要混用**：Linux / Mac 执行 bash 命令；Windows 执行 PowerShell 命令。
 
 **Linux / Mac：**
 ```bash
@@ -45,6 +47,8 @@ Invoke-RestMethod -Method Post -Uri "http://your-server:3000/api/logs" -Headers 
 ## 生成alog博客
 
 提炼本次技术成果：
+
+> ⚠ **根据当前操作系统选择命令，不要混用**：Linux / Mac 执行 bash 命令；Windows 执行 PowerShell 命令。
 
 **Linux / Mac：**
 ```bash
