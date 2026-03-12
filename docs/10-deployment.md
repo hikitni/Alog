@@ -164,7 +164,9 @@ ADMIN_TOKEN="your-admin-token" node setup.mjs
 │   ├── .env.production    生产环境变量
 │   └── setup.mjs          初始化向导
 ├── data/
-│   └── alog.db            SQLite 数据库文件
+│   ├── alog.db            SQLite 数据库文件
+│   └── backup/            定期备份目录（自动创建）
+│       └── alog_YYYYMMDD_HHMMSS.db.gz
 └── ecosystem.config.cjs   PM2 配置
 
 /var/log/alog/             应用日志（PM2 输出）
@@ -210,15 +212,62 @@ pm2 reload alog
 
 ### 数据库备份
 
-```bash
-# 手动备份
-cp /opt/alog/data/alog.db /backup/alog-$(date +%Y%m%d).db
+Alog 使用 `deploy/backup.sh` 脚本进行自动备份，备份到 `data/backup/` 目录。
 
-# 自动每日备份（加入 crontab）
-crontab -e
-# 添加：
-0 2 * * * cp /opt/alog/data/alog.db /backup/alog-$(date +\%Y\%m\%d).db
+**备份策略**
+
+| 项目 | 值 |
+|------|----|
+| 执行频率 | 每 2 天一次（crontab 控制）|
+| 执行时间 | 凌晨 3:00 |
+| 保留策略 | 60 天内，超期自动删除 |
+| 备份目录 | `/home/alog/alog/data/backup/` |
+| 备份格式 | `alog_YYYYMMDD_HHMMSS.db.gz`（gzip 压缩）|
+| 备份方式 | `sqlite3 .backup`（安全，支持 WAL 模式）|
+
+**初次配置（部署后执行一次）**
+
+```bash
+# 1. 复制备份脚本到服务器（已在项目 deploy/ 目录中）
+cd /home/alog/alog
+
+# 2. 添加可执行权限
+chmod +x deploy/backup.sh
+
+# 3. 手动执行一次验证
+bash deploy/backup.sh
+# 输出示例：
+# [2026-03-12 16:42:59] ✅ 备份完成: alog_20260312_164259.db.gz (24K)
+# [2026-03-12 16:42:59] 📦 当前备份总数: 1 个
+
+# 4. 写入 crontab（每 2 天凌晨 3 点自动执行）
+(crontab -l 2>/dev/null; echo '0 3 */2 * * /home/alog/alog/deploy/backup.sh >> /home/alog/alog/logs/backup.log 2>&1') | crontab -
+
+# 5. 确认 crontab 已写入
+crontab -l
 ```
+
+**日常运维**
+
+```bash
+# 查看备份日志
+tail -f /home/alog/alog/logs/backup.log
+
+# 查看当前备份文件列表
+ls -lh /home/alog/alog/data/backup/
+
+# 手动触发一次备份
+bash /home/alog/alog/deploy/backup.sh
+
+# 从备份恢复（停止服务后执行）
+pm2 stop alog
+cp /home/alog/alog/data/alog.db /home/alog/alog/data/alog.db.bak  # 保留当前
+gunzip -c /home/alog/alog/data/backup/alog_YYYYMMDD_HHMMSS.db.gz > /home/alog/alog/data/alog.db
+pm2 start alog
+```
+
+> **注意**：备份脚本依赖 `sqlite3` CLI。若服务器未安装，脚本会自动降级为 `cp` 方式。  
+> 安装命令：`sudo apt-get install -y sqlite3`
 
 ---
 
