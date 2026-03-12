@@ -1173,23 +1173,6 @@ code, pre, kbd, samp,
   background: var(--accent);
 }
 
-/* Sidebar close button — hidden on desktop */
-.sidebar-close-btn {
-  display: none;
-  align-self: flex-end;
-  padding: 4px 8px;
-  font-size: 14px;
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  margin-bottom: -12px;
-  transition: color 0.15s;
-}
-.sidebar-close-btn:hover {
-  color: var(--accent);
-}
-
 /* Backdrop overlay */
 .sidebar-backdrop {
   display: none;
@@ -1198,9 +1181,6 @@ code, pre, kbd, samp,
 @media (max-width: 1024px) {
   .sidebar-toggle-btn {
     display: flex;
-  }
-  .sidebar-close-btn {
-    display: block;
   }
   .sidebar-backdrop {
     display: block;

@@ -34,14 +34,6 @@ export default function SidebarDrawer({ children }: { children: React.ReactNode 
 
       {/* The sidebar shell — server content rendered inside */}
       <aside className={`alog-sidebar${open ? ' sidebar-open' : ''}`}>
-        {/* Close button — mobile only */}
-        <button
-          className="sidebar-close-btn"
-          aria-label="关闭侧边栏"
-          onClick={close}
-        >
-          ✕
-        </button>
         {children}
       </aside>
     </>
