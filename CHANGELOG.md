@@ -4,6 +4,36 @@
 
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
+## [1.10.0] - 2026-03-12
+
+### 新增
+- `alog-mcp/`：官方 MCP（Model Context Protocol）Server，基于 `@modelcontextprotocol/sdk` 实现
+  - **7 个 Tools**：`push_log`、`search_logs`、`get_log`、`update_log`、`delete_log`、`get_tags`、`get_authors`
+  - **4 个 Resources**：`alog://logs/recent`、`alog://logs/{id}`、`alog://tags`、`alog://authors`
+  - **2 个 Prompts**：`write_daily_log`、`write_blog_post`
+  - 支持 Claude Desktop、Cursor 等任意 MCP 客户端以 `npx -y alog-mcp` 方式接入
+  - 环境变量配置：`ALOG_SERVER_URL`、`ALOG_API_KEY`、`ALOG_SOURCE`
+- `docs/12-mcp-integration.md`：MCP 接入完整文档，含架构图、Tools/Resources/Prompts 说明、各客户端配置示例
+
+### 修改
+- `/setup` 接入页面新增 **Step 2: MCP 接入（推荐）** 模块
+  - 支持 Claude Desktop 和 Cursor 两种 MCP 客户端配置自动生成
+  - 凭证填写后自动内嵌到配置文件 JSON 展示
+  - 显示全部 7 个可用 Tool 标签
+  - 原规则文件方案移至 **Step 3（可选）**
+- 接入页面标题描述更新，突出 MCP 作为主流接入方案
+
+---
+
+## [1.9.3] - 2026-03-12
+
+### 修复
+- `.github/copilot-instructions.md`：PowerShell 模板双引号字符串中反引号（`` ` ``）被 PowerShell 转义，导致 Markdown 代码块围栏（` ```bash `、` ```typescript ` 等）写入数据库时损坏，显示格式混乱
+- 修复方案：将 `$c = "..."` 改为单引号 Here-String `$c = @'...'@`，其中反引号不做任何转义，Markdown 代码块内容原样保留
+- 规则版本从 `v2.0` 升至 `v2.1`
+
+---
+
 ## [1.9.2] - 2026-03-12
 
 ### 新增

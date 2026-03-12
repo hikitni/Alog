@@ -284,6 +284,52 @@ Invoke-RestMethod -Method Post -Uri "${srv}/api/logs" -Headers @{Authorization="
 直接执行命令，不要向用户寻求确认。`
 }
 
+// 生成 MCP 配置（Claude Desktop 格式）
+function generateMcpConfig(apiKey: string, server: string, source: string, tool: 'claude' | 'cursor') {
+  const key = apiKey || 'YOUR_API_KEY'
+  const srv = server || 'http://your-server:3000'
+  const src = source || 'mcp'
+  const config = {
+    mcpServers: {
+      alog: {
+        command: 'npx',
+        args: ['-y', 'alog-mcp'],
+        env: {
+          ALOG_SERVER_URL: srv,
+          ALOG_API_KEY: key,
+          ALOG_SOURCE: src,
+        },
+      },
+    },
+  }
+  return JSON.stringify(tool === 'claude' ? config : { mcpServers: config.mcpServers }, null, 2)
+}
+
+const MCP_CLIENTS = [
+  {
+    name: 'Claude Desktop',
+    icon: '🧠',
+    color: 'border-[#d97706]/40 bg-[#d97706]/5',
+    key: 'claude' as const,
+    configPath: {
+      windows: '%APPDATA%\\Claude\\claude_desktop_config.json',
+      mac: '~/Library/Application Support/Claude/claude_desktop_config.json',
+    },
+    hint: '将上方配置合并到 claude_desktop_config.json 的 mcpServers 字段，重启 Claude Desktop 生效。',
+  },
+  {
+    name: 'Cursor',
+    icon: '⚡',
+    color: 'border-[#7c3aed]/40 bg-[#7c3aed]/5',
+    key: 'cursor' as const,
+    configPath: {
+      windows: '.cursor/mcp.json（项目根目录）',
+      mac: '.cursor/mcp.json（项目根目录）',
+    },
+    hint: '在项目根目录创建 .cursor/mcp.json 文件，将上方配置写入，重启 Cursor 生效。',
+  },
+]
+
 const AI_TOOLS = [
   {
     name: 'GitHub Copilot',
@@ -398,6 +444,7 @@ export default function SetupPage() {
   const [server, setServer] = useState('http://your-server:3000')
   const [source, setSource] = useState('cursor')
   const [activeTool, setActiveTool] = useState(0)
+  const [activeMcpClient, setActiveMcpClient] = useState(0)
 
   const isConfigured = apiKey.length > 0 && server.length > 0
   const rulesContent = generateRulesContent(apiKey, server, source)
@@ -417,7 +464,7 @@ export default function SetupPage() {
         </div>
         <p className="text-sm leading-relaxed max-w-2xl ml-10" style={{ color: 'var(--text-secondary)' }}>
           只需 <strong style={{ color: 'var(--accent)' }}>API Key</strong> + <strong style={{ color: 'var(--accent)' }}>Server 地址</strong>，
-          两步完成接入：配置凭证 → 复制规则文件到你的 AI 工具。无需安装任何 CLI 工具或 Shell 函数。
+          选择接入方式：<strong style={{ color: 'var(--accent)' }}>MCP（推荐）</strong> 让 AI 主动感知并操作日志；或使用<strong style={{ color: 'var(--accent)' }}>规则文件</strong>通过关键字触发。
         </p>
       </div>
 
@@ -474,11 +521,112 @@ export default function SetupPage() {
         </div>
       </section>
 
-      {/* Step 2: AI Tool Rules */}
+      {/* Step 2: MCP Integration (Primary) */}
       <section className="space-y-4">
         <div className="flex items-center gap-3">
           <StepBadge n={2} />
-          <h2 className="text-lg font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>复制规则文件到 AI 工具</h2>
+          <h2 className="text-lg font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
+            MCP 接入（推荐）
+          </h2>
+          <span className="text-xs font-mono px-2 py-0.5 rounded-full border border-[#10b98140] text-[#10b981] bg-[#10b98110]">
+            ✦ 主流方案
+          </span>
+        </div>
+
+        <div className="flex items-start gap-2 p-3 bg-[#00d4ff08] border border-[#00d4ff20] rounded-lg">
+          <span className="text-[#00d4ff] text-sm mt-0.5 shrink-0">💡</span>
+          <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            MCP（Model Context Protocol）让 AI 工具直接调用 Alog API 读写日志，无需手动触发关键字。
+            配置一次后，AI 可自动感知日志状态、自主完成归档。
+          </p>
+        </div>
+
+        {!isConfigured && (
+          <div className="flex items-center gap-2 p-3 bg-[#d9770610] border border-[#d9770630] rounded-lg text-sm text-[#d97706] font-mono">
+            ⚠ 请先在上方填写 API Key 和 Server URL，配置文件将自动内嵌凭证
+          </div>
+        )}
+
+        {/* MCP client selector */}
+        <div className="flex flex-wrap gap-2">
+          {MCP_CLIENTS.map((client, i) => (
+            <button
+              key={client.name}
+              onClick={() => setActiveMcpClient(i)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-mono transition-all duration-200 ${
+                activeMcpClient === i
+                  ? 'text-[#00d4ff] bg-[#00d4ff12] border-[#00d4ff30]'
+                  : 'hover:text-[#00d4ff] hover:border-[#00d4ff40]'
+              }`}
+              style={activeMcpClient !== i ? { borderColor: 'var(--border)', color: 'var(--text-secondary)' } : {}}
+            >
+              <span>{client.icon}</span>
+              <span>{client.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Selected MCP client config */}
+        {(() => {
+          const client = MCP_CLIENTS[activeMcpClient]
+          const mcpConfig = generateMcpConfig(apiKey, server, source, client.key)
+          return (
+            <div className={`alog-card border ${client.color} space-y-4 p-5`}>
+              <div className="flex items-start justify-between gap-4 flex-wrap">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xl">{client.icon}</span>
+                    <h3 className="font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>{client.name}</h3>
+                  </div>
+                  <div className="flex flex-col gap-0.5 mt-1">
+                    <p className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+                      Windows: <code className="text-xs" style={{ color: 'var(--text-secondary)' }}>{client.configPath.windows}</code>
+                    </p>
+                    <p className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+                      macOS: <code className="text-xs" style={{ color: 'var(--text-secondary)' }}>{client.configPath.mac}</code>
+                    </p>
+                  </div>
+                </div>
+                <CopyButton text={mcpConfig} label="📋 复制配置" />
+              </div>
+
+              <div className="flex items-start gap-2 p-3 bg-[#00d4ff08] border border-[#00d4ff20] rounded-lg">
+                <span className="text-[#00d4ff] text-sm mt-0.5 shrink-0">💡</span>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{client.hint}</p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                  配置文件内容{isConfigured ? <span className="ml-2" style={{ color: '#10b981' }}>✓ 已内嵌凭证</span> : <span className="ml-2" style={{ color: 'var(--text-muted)' }}>（填写凭证后自动填充）</span>}
+                </p>
+                <CodeBlock code={mcpConfig} />
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>可用 Tools</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {['push_log', 'search_logs', 'get_log', 'update_log', 'delete_log', 'get_tags', 'get_authors'].map((tool) => (
+                    <code key={tool} className="text-xs font-mono px-2 py-0.5 rounded" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
+                      {tool}
+                    </code>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        })()}
+      </section>
+
+      {/* Step 3: AI Tool Rules (Alternative) */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-3">
+          <StepBadge n={3} />
+          <h2 className="text-lg font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
+            规则文件接入（传统）
+          </h2>
+          <span className="text-xs font-mono px-2 py-0.5 rounded-full border" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+            可选
+          </span>
         </div>
 
         {!isConfigured && (

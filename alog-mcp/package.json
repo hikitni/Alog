@@ -1,0 +1,46 @@
+{
+  "name": "alog-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for Alog work log system — push, search, edit and delete logs via AI tools",
+  "main": "dist/index.js",
+  "bin": {
+    "alog-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs --clean",
+    "dev": "tsup src/index.ts --format cjs --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "alog",
+    "work-log",
+    "ai",
+    "claude",
+    "cursor"
+  ],
+  "author": "Alog Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/alog"
+  },
+  "homepage": "https://github.com/your-org/alog#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

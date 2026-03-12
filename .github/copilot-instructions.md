@@ -1,5 +1,5 @@
 # Alog 工作日志规则
-<!-- rules-version: v2.0 -->
+<!-- rules-version: v2.1 -->
 
 ## 触发关键字
 
@@ -35,7 +35,20 @@ curl -s -X POST http://your-server:3000/api/logs \
 
 **Windows PowerShell：**
 ```powershell
-$c = "## 今日完成任务`n- （替换为实际内容）`n`n## 技术要点`n- （关键决策）`n`n## 遇到的问题`n- 无`n`n## 明日计划`n- （下一步）"
+# ⚠ 使用单引号 Here-String @'...'@ 避免反引号转义污染 Markdown 代码块围栏
+$c = @'
+## 今日完成任务
+- （替换为实际内容）
+
+## 技术要点
+- （关键决策）
+
+## 遇到的问题
+- 无
+
+## 明日计划
+- （下一步）
+'@
 $b = [System.Text.Encoding]::UTF8.GetBytes((@{ type="daily"; title="日报 — $(Get-Date -Format 'yyyy-MM-dd')"; content=$c; source="copilot"; tags="标签1,标签2" } | ConvertTo-Json -Depth 3))
 Invoke-RestMethod -Method Post -Uri "http://your-server:3000/api/logs" -Headers @{Authorization="Bearer YOUR_API_KEY"} -ContentType "application/json; charset=utf-8" -Body $b
 ```
@@ -61,7 +74,20 @@ curl -s -X POST http://your-server:3000/api/logs \
 
 **Windows PowerShell：**
 ```powershell
-$c = "## 背景与目标`n（问题描述）`n`n## 实现方案`n（技术思路）`n`n## 关键实现`n（代码示例）`n`n## 总结`n（价值）"
+# ⚠ 使用单引号 Here-String @'...'@ 避免反引号转义污染 Markdown 代码块围栏
+$c = @'
+## 背景与目标
+（问题描述）
+
+## 实现方案
+（技术思路）
+
+## 关键实现
+（代码示例）
+
+## 总结
+（价值）
+'@
 $b = [System.Text.Encoding]::UTF8.GetBytes((@{ type="blog"; title="博客标题"; content=$c; source="copilot"; tags="标签1,标签2" } | ConvertTo-Json -Depth 3))
 Invoke-RestMethod -Method Post -Uri "http://your-server:3000/api/logs" -Headers @{Authorization="Bearer YOUR_API_KEY"} -ContentType "application/json; charset=utf-8" -Body $b
 ```
