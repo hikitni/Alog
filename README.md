@@ -222,6 +222,16 @@ pm2 startup
 
 ---
 
+## 🤝 参与贡献
+
+欢迎提交 PR 或 Issue！开始之前请阅读 **[CONTRIBUTING.md](CONTRIBUTING.md)**，了解：
+
+- 提交规范（Conventional Commits）
+- CHANGELOG 维护规范（每次变更必须更新）
+- 版本号规则、分支策略、代码规范
+
+---
+
 ## 📋 更新日志
 
 见 [CHANGELOG.md](CHANGELOG.md)

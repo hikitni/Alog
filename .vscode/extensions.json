@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    // TypeScript & Next.js
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "prisma.prisma",
+
+    // Markdown & Changelog
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+
+    // Git 工作流
+    "eamodio.gitlens",
+    "vivaxy.vscode-conventional-commits",
+
+    // AI 辅助
+    "github.copilot",
+    "github.copilot-chat"
+  ]
+}

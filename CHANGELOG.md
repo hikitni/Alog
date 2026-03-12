@@ -4,6 +4,21 @@
 
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
+## [1.9.2] - 2026-03-12
+
+### 新增
+- `CONTRIBUTING.md`：贡献指南，包含提交规范（Conventional Commits）、CHANGELOG 维护规范、版本号规则、分支策略和代码规范
+- `.github/PULL_REQUEST_TEMPLATE.md`：PR 模板，提交 PR 时自动展示变更类型勾选项和提交前检查清单（含 CHANGELOG 更新提醒）
+- `.github/ISSUE_TEMPLATE/bug_report.md`：Bug 报告 Issue 模板
+- `.github/ISSUE_TEMPLATE/feature_request.md`：功能请求 Issue 模板
+- `.github/workflows/pr-checks.yml`：PR 自动化检查 CI，包含 CHANGELOG 更新检测、ESLint 和构建验证三个 job
+- `client/hooks/pre-commit`：Git pre-commit Hook 脚本，本地提交前自动检查 CHANGELOG 是否已更新
+- `client/hooks/install-hooks.sh`：一键安装 Git Hooks 脚本
+- `.vscode/extensions.json`：VS Code 推荐扩展，包含 ESLint、Tailwind、Prisma、Conventional Commits、GitLens 等
+- `README.md`：新增「参与贡献」章节，链接到 CONTRIBUTING.md
+
+---
+
 ## [1.9.1] - 2026-03-12
 
 ### 性能优化
