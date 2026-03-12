@@ -4,6 +4,16 @@
 
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
+## [1.10.2] - 2026-03-12
+
+### 修复
+- `alog-mcp`：`delete_log` / `update_log` 调用返回 401 Unauthorized
+- 根因：`PATCH /api/logs/[id]` 和 `DELETE /api/logs/[id]` 使用 `x-token` 请求头鉴权，而 `client.ts` 误用了 `Authorization: Bearer`（仅 `POST /api/logs` 使用此头）
+- 修复方案：新增 `tokenHeaders()` 函数发送 `x-token`，`updateLog` 和 `deleteLog` 改用此函数；`pushLog` 保持 `authHeaders()`（`Authorization: Bearer`）
+- npm 已发布：`alog-mcp@1.0.2`
+
+---
+
 ## [1.10.1] - 2026-03-12
 
 ### 修复
