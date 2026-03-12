@@ -1142,8 +1142,99 @@ code, pre, kbd, samp,
 
 /* Responsive sidebar */
 @media (max-width: 1024px) {
-  .alog-sidebar { display: none; }
+/* Hamburger button — hidden on desktop */
+.sidebar-toggle-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.sidebar-toggle-btn:hover {
+  border-color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.06);
+}
+.sidebar-toggle-btn span {
+  display: block;
+  height: 2px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.sidebar-toggle-btn:hover span {
+  background: var(--accent);
+}
+
+/* Sidebar close button — hidden on desktop */
+.sidebar-close-btn {
+  display: none;
+  align-self: flex-end;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-bottom: -12px;
+  transition: color 0.15s;
+}
+.sidebar-close-btn:hover {
+  color: var(--accent);
+}
+
+/* Backdrop overlay */
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-toggle-btn {
+    display: flex;
+  }
+  .sidebar-close-btn {
+    display: block;
+  }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    animation: backdropFadeIn 0.2s ease;
+  }
+  @keyframes backdropFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Override: sidebar becomes a fixed left drawer instead of display:none */
+  .alog-sidebar {
+    display: flex !important;
+    position: fixed;
+    left: -290px;
+    top: 56px;
+    z-index: 200;
+    width: 272px;
+    height: calc(100vh - 56px);
+    transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+  }
+  .alog-sidebar.sidebar-open {
+    left: 0;
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.5);
+  }
   .alog-main { padding: 24px 20px; }
+}
 }
 @media (max-width: 768px) {
   .stats-4 { grid-template-columns: repeat(2, 1fr); }

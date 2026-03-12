@@ -41,6 +41,15 @@ export default function Header() {
         style={{ borderColor: 'var(--border)', backgroundColor: 'color-mix(in srgb, var(--bg) 85%, transparent)' }}>
         <div className="header-scan-line" />
         <div className="px-5 h-14 flex items-center justify-between gap-3">
+          {/* Hamburger — mobile only, toggles sidebar drawer */}
+          <button
+            className="sidebar-toggle-btn"
+            aria-label="展开侧边栏"
+            onClick={() => document.dispatchEvent(new Event('toggleSidebar'))}
+          >
+            <span /><span /><span />
+          </button>
+
           {/* Logo */}
           <a href="https://github.com/2634213728/Alog" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 shrink-0 transition-all duration-200 hover:scale-[1.02]">

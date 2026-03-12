@@ -52,7 +52,7 @@ export default async function Sidebar() {
   ]
 
   return (
-    <aside className="alog-sidebar">
+    <>
 
       {/* ── System Status ── */}
       <div className="sb-status-panel">
@@ -160,6 +160,6 @@ export default async function Sidebar() {
         </div>
       </div>
 
-    </aside>
+    </>
   )
 }

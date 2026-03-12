@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import ThemeProvider from "@/components/ThemeProvider";
 import BackgroundFX from "@/components/BackgroundFX";
 import Sidebar from "@/components/Sidebar";
+import SidebarDrawer from "@/components/SidebarDrawer";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -54,7 +55,9 @@ export default function RootLayout({
           <BackgroundFX />
           <Header />
           <div className="alog-layout">
-            <Sidebar />
+            <SidebarDrawer>
+              <Sidebar />
+            </SidebarDrawer>
             <main className="alog-main">
               {children}
             </main>
