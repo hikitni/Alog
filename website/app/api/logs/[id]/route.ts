@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils'
 
+// GET /api/logs/[id] — get single log
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+  const log = await prisma.log.findUnique({
+    where: { id },
+    include: { tags: { include: { tag: true } } },
+  })
+  if (!log) return NextResponse.json({ error: 'Log not found' }, { status: 404 })
+  return NextResponse.json({ log })
+}
+
 // Shared auth: accept Admin Token or any valid API Key
 async function verifyToken(req: NextRequest): Promise<boolean> {
   const token = req.headers.get('x-token')

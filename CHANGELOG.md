@@ -4,6 +4,14 @@
 
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
+## [1.10.3] - 2026-03-12
+
+### 修复
+- `GET /api/logs/[id]`：新增单条日志查询接口，修复 `alog-mcp` `get_log` 工具调用返回 405 Method Not Allowed 的问题
+- `alog-mcp` MCP 配置固定版本号为 `@1.0.2`，避免 npx 缓存旧版本导致 `delete_log` / `update_log` 仍触发 401
+
+---
+
 ## [1.10.2] - 2026-03-12
 
 ### 修复
